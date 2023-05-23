@@ -7,6 +7,8 @@ import (
 
 type CustomerRepository interface {
 	Insert(customer *domain.Customer) (*domain.Customer, error)
+	FindByEmail(email string) (*domain.Customer, error)
+	FindRoleByName(name string) (*domain.Role, error)
 }
 
 type customerConnection struct {
@@ -23,6 +25,31 @@ func (c *customerConnection) Insert(customer *domain.Customer) (*domain.Customer
 		return nil, err
 	}
 	return customer, nil
+}
+
+func (c *customerConnection) FindByEmail(email string) (*domain.Customer, error) {
+	var customer domain.Customer
+	err := c.db.Where("email = ?", email).First(&customer).Error
+	if err != nil {
+		return nil, err
+	}
+	return &customer, nil
+}
+
+func (c *customerConnection) FindRoleByName(name string) (*domain.Role, error) {
+	if name == "" {
+		name = "user"
+	}
+
+	var role domain.Role
+
+	err := c.db.Where("name = ?", name).First(&role).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &role, nil
 }
 
 // Path: internal\repositories\customer_repository.go
