@@ -9,7 +9,10 @@ import (
 
 type CustomerService interface {
 	Register(user *domain.Customer) (*domain.Customer, error)
+	Login(email, password string) (*domain.Customer, error)
 	FindRoleByName(name string) (*domain.Role, error)
+	GetCustomer(id string) (*domain.Customer, error)
+	GetAllCustomer() ([]domain.Customer, error)
 }
 
 type customerService struct {
@@ -78,6 +81,39 @@ func (c *customerService) Register(customer *domain.Customer) (*domain.Customer,
 	return customer, nil
 }
 
+func (c *customerService) Login(email, password string) (*domain.Customer, error) {
+	conn, err := config.Connect()
+
+	if err != nil {
+		return nil, &ErrorMessage{
+			Message:    "Failed to connect to database",
+			StatusCode: 500,
+		}
+	}
+
+	repo := repositories.NewCustomerRepository(conn)
+
+	user, err := repo.FindByEmail(email)
+
+	if err != nil {
+		return nil, &ErrorMessage{
+			Message:    "Email not found",
+			StatusCode: 404,
+		}
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+
+	if err != nil {
+		return nil, &ErrorMessage{
+			Message:    "Password incorrect",
+			StatusCode: 400,
+		}
+	}
+
+	return user, nil
+}
+
 func (c *customerService) FindRoleByName(name string) (*domain.Role, error) {
 	conn, err := config.Connect()
 
@@ -100,4 +136,52 @@ func (c *customerService) FindRoleByName(name string) (*domain.Role, error) {
 	}
 
 	return role, nil
+}
+
+func (c *customerService) GetCustomer(id string) (*domain.Customer, error) {
+	conn, err := config.Connect()
+
+	if err != nil {
+		return nil, &ErrorMessage{
+			Message:    "Failed to connect to database",
+			StatusCode: 500,
+		}
+	}
+
+	repo := repositories.NewCustomerRepository(conn)
+
+	customer, err := repo.GetCustomer(id)
+
+	if err != nil {
+		return nil, &ErrorMessage{
+			Message:    "Customer not found",
+			StatusCode: 404,
+		}
+	}
+
+	return customer, nil
+}
+
+func (c *customerService) GetAllCustomer() ([]domain.Customer, error) {
+	conn, err := config.Connect()
+
+	if err != nil {
+		return nil, &ErrorMessage{
+			Message:    "Failed to connect to database",
+			StatusCode: 500,
+		}
+	}
+
+	repo := repositories.NewCustomerRepository(conn)
+
+	customers, err := repo.GetAllCustomer()
+
+	if err != nil {
+		return nil, &ErrorMessage{
+			Message:    "Customer not found",
+			StatusCode: 404,
+		}
+	}
+
+	return customers, nil
 }

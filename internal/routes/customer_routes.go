@@ -10,5 +10,7 @@ func SetupCustomerRoutes(router fiber.Router, customerService services.CustomerS
 	authController := controllers.NewUserHandler(customerService)
 
 	router.Post("/register", authController.Register)
+	router.Get("/customer/:id", authController.GetCustomer)
+	router.Get("/customers", authController.GetAllCustomer)
 
 }

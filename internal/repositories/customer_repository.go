@@ -9,6 +9,8 @@ type CustomerRepository interface {
 	Insert(customer *domain.Customer) (*domain.Customer, error)
 	FindByEmail(email string) (*domain.Customer, error)
 	FindRoleByName(name string) (*domain.Role, error)
+	GetCustomer(id string) (*domain.Customer, error)
+	GetAllCustomer() ([]domain.Customer, error)
 }
 
 type customerConnection struct {
@@ -52,5 +54,22 @@ func (c *customerConnection) FindRoleByName(name string) (*domain.Role, error) {
 	return &role, nil
 }
 
-// Path: internal\repositories\customer_repository.go
+func (c *customerConnection) GetCustomer(id string) (*domain.Customer, error) {
+	var customer domain.Customer
+	err := c.db.Where("id = ?", id).First(&customer).Error
+	if err != nil {
+		return nil, err
+	}
+	return &customer, nil
+}
 
+func (c *customerConnection) GetAllCustomer() ([]domain.Customer, error) {
+	var customers []domain.Customer
+	err := c.db.Find(&customers).Error
+	if err != nil {
+		return nil, err
+	}
+	return customers, nil
+}
+
+// Path: internal\repositories\customer_repository.go

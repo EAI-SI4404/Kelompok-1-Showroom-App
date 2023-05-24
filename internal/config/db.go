@@ -42,6 +42,8 @@ func Connect() (*gorm.DB, error) {
 	err = conn.AutoMigrate(
 		&domain.Customer{},
 		&domain.Role{},
+		&domain.CutstomerBalance{},
+		&domain.CustomerToken{},
 	)
 
 	if err != nil {
