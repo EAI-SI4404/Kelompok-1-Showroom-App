@@ -9,6 +9,7 @@ type CustomerToken struct {
 	ID         string   `json:"id" gorm:"primaryKey, type:uuid, default:uuid_generate_v4()"`
 	CustomerID string   `json:"customer_id"`
 	Customer   Customer `json:"customer" gorm:"foreignKey:CustomerID;references:ID"`
+	Role       string   `json:"role"`
 	Token      string   `json:"token"`
 }
 

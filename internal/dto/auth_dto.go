@@ -1,5 +1,9 @@
 package dto
 
+import (
+	"github.com/golang-jwt/jwt/v4"
+)
+
 type RegisterRequest struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
@@ -33,7 +37,6 @@ type LoginResponse struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
-	Password string `json:"password"`
 	Address  string `json:"address"`
 	City     string `json:"city"`
 	Province string `json:"province"`
@@ -52,4 +55,10 @@ type GetCustomerResponse struct {
 	Province string `json:"province"`
 	ZipCode  string `json:"zip_code"`
 	Role     string `json:"role"`
+}
+
+type Claims struct {
+	UserID string `json:"user_id"`
+	Email  string `json:"email"`
+	jwt.RegisteredClaims
 }

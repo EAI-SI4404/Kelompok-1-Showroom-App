@@ -50,6 +50,12 @@ func Connect() (*gorm.DB, error) {
 		log.Fatal(err)
 	}
 
+	err = domain.SeedCustomers(conn)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return conn, err
 
 }
