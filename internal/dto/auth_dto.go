@@ -49,7 +49,6 @@ type GetCustomerResponse struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Phone    string `json:"phone"`
-	Password string `json:"password"`
 	Address  string `json:"address"`
 	City     string `json:"city"`
 	Province string `json:"province"`
