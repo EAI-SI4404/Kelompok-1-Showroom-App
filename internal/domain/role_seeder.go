@@ -14,7 +14,7 @@ func SeedRoles(db *gorm.DB) error {
 		},
 		{
 			ID:   uuid.NewString(),
-			Name: "user",
+			Name: "customer",
 		},
 	}
 

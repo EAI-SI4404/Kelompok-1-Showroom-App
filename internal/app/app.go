@@ -20,6 +20,7 @@ func StartApplication() {
 		panic(err)
 	}
 
+
 	// initialize repository
 	customerRepository := repositories.NewCustomerRepository(db)
 
@@ -31,6 +32,18 @@ func StartApplication() {
 
 	// initialize routes
 	routes.SetupCustomerRoutes(endpoint, customerService)
+
+	// intialize balance repository
+	balanceRepository := repositories.NewBalanceRepository(db)
+
+	// initialize balance service
+	balanceService := services.NewBalanceService(balanceRepository)
+
+	// intialize balance routes
+	routes.SetupBalanceRoutes(endpoint, balanceService)
+
+	// setup payment routes
+	routes.SetupPaymentRoutes(app)
 
 	// start application
 	err = app.Listen(":" + os.Getenv("PORT"))

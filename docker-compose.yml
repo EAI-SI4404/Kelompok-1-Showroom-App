@@ -35,7 +35,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: faruqihafiz/tubes-eai-crm
+    # image: faruqihafiz/tubes-eai-crm
     environment:
       DB_HOST: kelompok-1-showroom-app-db-1
       DB_USER: postgres
